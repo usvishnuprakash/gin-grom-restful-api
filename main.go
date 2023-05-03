@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -12,9 +14,14 @@ import (
 
 func main() {
 
-	err := godotenv.Load(".env.example")
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal(err)
+	}
+	environmentPath := filepath.Join(dir, ".env.example")
+	err = godotenv.Load(environmentPath)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	r := gin.New()
